@@ -1,15 +1,83 @@
-name: my-snap-name # you probably want to 'snapcraft register <name>'
-version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
-summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+name: glade
+version: '3.22.1'
+summary: GTK+ User Interface Builder
 description: |
-  This is my-snap's description. You have a paragraph or two to tell the
-  most important story about your snap. Keep it under 100 words though,
-  we live in tweetspace and your description wants to look good in the snap
-  store.
+  Glade is a RAD tool to enable quick & easy development of user interfaces for
+  the GTK+ 3 toolkit and the GNOME desktop environment.
+  The user interfaces designed in Glade are saved as XML and these can be loaded
+  by applications dynamically as needed by using GtkBuilder or used directly to
+  define a new GtkWidget derived object class using Gtk+ new template feature.
+  By using GtkBuilder, Glade XML files can be used in numerous programming
+  languages including C, C++, C#, Vala, Java, Perl, Python,and others.
 
-confinement: devmode # use 'strict' once you have the right plugs and slots
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: strict
+
+#icon: share/icons/hicolor/256x256/apps/glade.png
+icon: glade.png
+
+plugs:
+#  gnome-3-28-1804:
+#    interface: content
+#    target: gnome-platform
+#    default-provider: gnome-3-28-1804
+  gnome-3-26-1604:
+    interface: content
+    target: gnome-platform
+    default-provider: gnome-3-26-1604:gnome-3-26-1604
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/usr/share/themes
+    default-provider: gtk-common-themes:gtk-3-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/usr/share/icons
+    default-provider: gtk-common-themes:icon-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/usr/share/sounds
+    default-provider: gtk-common-themes:sounds-themes
+
+
+apps:
+  glade:
+    command: desktop-launch glade
+    desktop: share/applications/glade.desktop
+    environment:
+      GLADE_CATALOG_SEARCH_PATH: "$SNAP/share/glade/catalogs"
+      GLADE_MODULE_SEARCH_PATH: "$SNAP/lib/glade/modules"
+      GLADE_PIXMAP_DIR: "$SNAP/share/glade/pixmaps"
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - unity7
+      - x11
+      - wayland
+      - home
+      - removable-media
+      - mount-observe
 
 parts:
-  my-part:
-    # See 'snapcraft plugins'
-    plugin: nil
+  glade:
+    after:
+      - desktop-gnome-platform
+    plugin: autotools
+    source: https://gitlab.gnome.org/GNOME/glade.git
+    source-tag: GLADE_3_22_1
+    build-attributes:
+      - no-system-libraries
+    install-via: prefix
+    configflags:
+      - --disable-scrollkeeper
+    override-build: |
+      # Fix application icon lookup
+      sed --in-place 's|^Icon=.*|Icon=\${SNAP}/meta/gui/icon.png|' data/glade.desktop.in.in
+      snapcraftctl build
+    build-packages:
+      - gnome-common
+      - gtk-doc-tools
+      - yelp-tools
+      - gobject-introspection
+      - libgtk-3-dev
+      - libxml2-dev

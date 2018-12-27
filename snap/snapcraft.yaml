@@ -74,6 +74,8 @@ parts:
       # Fix application icon lookup
       sed --in-place 's|^Icon=.*|Icon=\${SNAP}/meta/gui/icon.png|' data/glade.desktop.in.in
       snapcraftctl build
+    organize:
+      share/locale: usr/share/locale
     build-packages:
       - gnome-common
       - gtk-doc-tools

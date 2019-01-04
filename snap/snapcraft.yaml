@@ -68,8 +68,6 @@ parts:
     build-attributes:
       - no-system-libraries
     install-via: prefix
-    configflags:
-      - --disable-scrollkeeper
     override-build: |
       # Fix application icon lookup
       sed --in-place 's|^Icon=.*|Icon=\${SNAP}/meta/gui/icon.png|' data/glade.desktop.in.in
@@ -81,5 +79,9 @@ parts:
       - gtk-doc-tools
       - yelp-tools
       - gobject-introspection
+      - libgirepository1.0-dev
       - libgtk-3-dev
       - libxml2-dev
+      - libwebkit2gtk-4.0-dev
+      - python-gi-dev
+      - python2.7-dev

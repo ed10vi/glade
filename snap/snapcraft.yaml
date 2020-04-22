@@ -17,53 +17,35 @@ base: core18
 #icon: share/icons/hicolor/256x256/apps/glade.png
 icon: glade.png
 
-plugs:
-  gnome-3-28-1804:
-    interface: content
-    target: gnome-platform
-    default-provider: gnome-3-28-1804:gnome-3-28-1804
-  gtk-3-themes:
-    interface: content
-    target: $SNAP/usr/share/themes
-    default-provider: gtk-common-themes:gtk-3-themes
-  icon-themes:
-    interface: content
-    target: $SNAP/usr/share/icons
-    default-provider: gtk-common-themes:icon-themes
-  sound-themes:
-    interface: content
-    target: $SNAP/usr/share/sounds
-    default-provider: gtk-common-themes:sounds-themes
-
+slots:
+  dbus:
+    interface: dbus
+    bus: session
+    name: org.gnome.Glade
 
 apps:
   glade:
-    command: desktop-launch glade
+    command: glade
     desktop: share/applications/glade.desktop
+    extensions: [ gnome-3-28 ]
     environment:
       GLADE_CATALOG_SEARCH_PATH: "$SNAP/share/glade/catalogs"
       GLADE_MODULE_SEARCH_PATH: "$SNAP/lib/glade/modules"
       GLADE_PIXMAP_DIR: "$SNAP/share/glade/pixmaps"
     plugs:
-      - desktop
-      - desktop-legacy
       - gsettings
       - unity7
-      - x11
-      - wayland
       - home
       - removable-media
       - mount-observe
+    slots:
+      - dbus
 
 parts:
   glade:
-    after:
-      - desktop-gnome-platform
     plugin: autotools
     source: https://gitlab.gnome.org/GNOME/glade.git
     source-tag: GLADE_3_22_1
-    build-attributes:
-      - no-system-libraries
     install-via: prefix
     override-build: |
       # Fix application icon lookup
@@ -82,3 +64,5 @@ parts:
       - libwebkit2gtk-4.0-dev
       - python-gi-dev
       - python2.7-dev
+    stage-packages:
+      - libpython2.7

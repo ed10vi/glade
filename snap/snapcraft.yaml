@@ -49,8 +49,14 @@ parts:
     install-via: prefix
     override-build: |
       # Fix application icon lookup
-      sed --in-place 's|^Icon=.*|Icon=\${SNAP}/meta/gui/icon.png|' data/glade.desktop.in.in
+      sed --in-place 's|^Icon=.*|Icon=snap.glade.glade|' data/glade.desktop.in.in
       snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/meta/gui/
+      cp -r $SNAPCRAFT_PART_INSTALL/share/icons $SNAPCRAFT_PART_INSTALL/meta/gui/
+      for i in `find $SNAPCRAFT_PART_INSTALL/meta/gui/icons -name "*.svg" -o -name "*.png"`
+      do
+        mv $i "`dirname $i`/snap.glade.`basename $i`"
+      done
     organize:
       share/locale: usr/share/locale
     build-packages:

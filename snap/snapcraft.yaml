@@ -1,5 +1,5 @@
 name: glade
-version: '3.22.1'
+version: '3.22.2'
 summary: GTK+ User Interface Builder
 description: |
   Glade is a RAD tool to enable quick & easy development of user interfaces for
@@ -45,7 +45,7 @@ parts:
   glade:
     plugin: autotools
     source: https://gitlab.gnome.org/GNOME/glade.git
-    source-tag: GLADE_3_22_1
+    source-tag: GLADE_3_22_2
     install-via: prefix
     override-build: |
       # Fix application icon lookup

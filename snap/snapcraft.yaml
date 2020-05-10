@@ -43,17 +43,17 @@ parts:
       do
         mv $i "`dirname $i`/snap.$SNAPCRAFT_PROJECT_NAME.`basename $i`"
       done
-    organize:
-      snap/glade/current/usr: usr
     build-packages:
       - gnome-common
       - libxml2-dev
       - libglib2.0-dev
       - libgtk-3-dev
       - python-gi-dev
-      - python2.7-dev
+      - python3.6-dev
       - gtk-doc-tools
       - yelp-tools
       - intltool
       - gobject-introspection
       - libgirepository1.0-dev
+    stage-packages:
+      - libpython3.6

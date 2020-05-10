@@ -17,6 +17,7 @@ apps:
     extensions: [gnome-3-34]
     environment:
       GLADE_CATALOG_SEARCH_PATH: "$SNAP/usr/share/glade/catalogs"
+      GLADE_MODULE_SEARCH_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/glade/modules"
       GLADE_PIXMAP_DIR: "$SNAP/usr/share/glade/pixmaps"
     plugs:
       - home

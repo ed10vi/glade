@@ -47,6 +47,15 @@ parts:
       do
         mv $i "`dirname $i`/snap.$SNAPCRAFT_PROJECT_NAME.`basename $i`"
       done
+    override-prime: |
+      snapcraftctl prime
+      for i in usr/share/help/*/glade/figures/main-window.png
+      do
+        if [ -L $i ]
+        then
+          ln -sf ../../../`readlink $i | cut -d '/' -f 5-` $i
+        fi
+      done
     build-packages:
       - gnome-common
       - libxml2-dev
